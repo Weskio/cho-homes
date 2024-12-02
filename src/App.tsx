@@ -9,6 +9,9 @@ import NotFound from './pages/notFound/not-found'
 import Contact from './pages/contact/contact'
 import Services from './pages/services/services'
 import AboutUs from './pages/aboutUs/aboutUs'
+import AdminDashboard from './pages/admin/dashboard'
+import AdminLogin from './pages/admin/login'
+import Register from './pages/admin/register'
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -22,6 +25,9 @@ const AnimatedRoutes = () => {
         <Route path="/services" element={<Layout><Services /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/single/:id" element={<Layout><SingleProperty /></Layout>} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<Register />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
