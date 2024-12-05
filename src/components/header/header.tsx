@@ -4,11 +4,14 @@ import { MENUITEMS } from "../../constants/data";
 import { Link } from "../../constants/interfaces";
 import Logo from "./logo";
 import Button from "../reusables/button";
+import { useAuth } from "../../context/auth-context";
+import LogoutButton from "../auth/logout-button";
 
-const header = () => {
+const Header = () => {
     const [showNotification, setShowNotification] = useState(true);
     const [showMenu, setShowMenu] = useState(false);
     const menuItems: Link[] = MENUITEMS
+    const { user } = useAuth()
 
   return (
     <div className=''>
@@ -47,11 +50,15 @@ const header = () => {
                     <img src="./images/mobile-menu-icon.png" alt="" />
                 </button>
             </div>
-            <div className="contact hidden lg:block">
-                <NavLink to={'/contact'}>
-                <Button text="Contact Us" variant="black"/>
-                </NavLink>
-             </div>
+            <div className="flex items-center gap-4">
+                {user ? (
+                    <LogoutButton />
+                ) : (
+                    <NavLink to={'/contact'}>
+                        <Button text="Contact Us" variant="black"/>
+                    </NavLink>
+                )}
+            </div>
         </div>
 
         <div className={`mob-menu fixed z-10 inset-0 bg-dark-90 bg-opacity-80 transition-all duration-300 ease-out ${showMenu ? 'visible opacity-100' : 'invisible opacity-0'}`}>
@@ -87,4 +94,4 @@ const header = () => {
   )
 }
 
-export default header
+export default Header
