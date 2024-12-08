@@ -1,44 +1,90 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import './index.css'
-import Layout from './components/layout/layout'
-import Home from './pages/home/home'
-import Properties from './pages/properties/properties'
-import SingleProperty from './pages/single-property/single-property'
-import { AnimatePresence } from 'framer-motion'
-import NotFound from './pages/notFound/not-found'
-import Contact from './pages/contact/contact'
-import Services from './pages/services/services'
-import AboutUs from './pages/aboutUs/aboutUs'
-import AdminDashboard from './pages/admin/dashboard'
-import AdminLogin from './pages/admin/login'
-import Register from './pages/admin/register'
-
-const AnimatedRoutes = () => {
-  const location = useLocation();
-  
-  return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/properties" element={<Layout><Properties /></Layout>} />
-        <Route path="/about-us" element={<Layout><AboutUs /></Layout>} />
-        <Route path="/services" element={<Layout><Services /></Layout>} />
-        <Route path="/contact" element={<Layout><Contact /></Layout>} />
-        <Route path="/single/:id" element={<Layout><SingleProperty /></Layout>} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/register" element={<Register />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AnimatePresence>
-  );
-};
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Properties from './pages/properties/properties';
+import AdminLayout from './components/layouts/admin-layout';
+import AdminOverview from './pages/admin/overview';
+import AdminProperties from './pages/admin/properties';
+import AdminUsers from './pages/admin/users';
+import AdminMessages from './pages/admin/messages';
+import ProtectedRoute from './components/auth/protected-route';
+import AuthRoute from './components/auth/auth-route';
+import { AuthProvider } from './context/auth-context';
+import SingleProperty from './pages/single-property/single-property';
+import Home from './pages/home/home';
+import Login from './pages/admin/login';
+import Register from './pages/admin/register';
+import Layout from './components/layout/layout';
+import NotFound from './pages/notFound/not-found';
+import { AnimatePresence } from 'framer-motion';
+import SurprisePage from './pages/surprise/surprise';
+import { CacheProvider } from './context/CacheContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AnimatedRoutes />
-    </BrowserRouter>
+    <Router>
+      <CacheProvider>
+        <AuthProvider>
+          <AnimatePresence mode="wait">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Layout><Home /></Layout>} />
+              <Route path="/properties" element={<Layout><Properties /></Layout>} />
+              <Route path="/single/:id" element={<Layout><SingleProperty /></Layout>} />
+              <Route path="surprise" element={<SurprisePage />} />
+
+              {/* Auth Routes */}
+              <Route path="/admin/login" element={
+                <AuthRoute>
+                  <Login />
+                </AuthRoute>
+              } />
+              <Route path="/admin/register" element={
+                <AuthRoute>
+                  <Register />
+                </AuthRoute>
+              } />
+
+              {/* Admin Routes */}
+              <Route path="/admin/*" element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }>
+                <Route index element={<AdminOverview />} />
+                <Route path="dashboard" element={<AdminOverview />} />
+                <Route path="properties" element={<AdminProperties />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="messages" element={<AdminMessages />} />
+              </Route>
+
+              {/* 404 Route */}
+              <Route path="*" element={<Layout><NotFound /></Layout>} />
+            </Routes>
+          </AnimatePresence>
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: '#1F2937',
+                color: '#fff',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#10B981',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#EF4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
+        </AuthProvider>
+      </CacheProvider>
+    </Router>
   );
 }
 
