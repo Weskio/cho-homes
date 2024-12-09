@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { FiMapPin } from 'react-icons/fi'
+import { FiMapPin, FiMail, FiPhone } from 'react-icons/fi'
 import { BiBed, BiBath, BiArea } from 'react-icons/bi'
 import { useState, useEffect } from 'react'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
@@ -10,6 +10,7 @@ import { Property, fetchPropertyDetails } from '../../services/api'
 import { getPropertyById } from '../../services/properties.firebase'
 import { mapFirebaseToAPIProperty } from '../../types/property'
 import Loading from '../../components/reusables/loading'
+import ContactForm from '../../components/forms/contact-form'
 
 const SingleProperty = () => {
   const { id } = useParams<{ id: string }>()
@@ -79,7 +80,7 @@ const SingleProperty = () => {
                 </h1>
                 <div className="flex items-center gap-2 text-dark-10">
                   <FiMapPin className="text-btn-primary" />
-                  <span>{property.location[property.location.length - 1].name}</span>
+                  <span>{property.location}</span>
                 </div>
               </div>
               <div className="text-2xl md:text-3xl font-semibold text-btn-primary">
@@ -115,7 +116,7 @@ const SingleProperty = () => {
                   onClick={() => setActiveIndex(idx)}
                 >
                   <img
-                    src={photo.url}
+                    src={photo}
                     alt={`Thumbnail ${idx + 1}`}
                     className="w-16 h-12 md:w-20 md:h-14 lg:w-24 lg:h-16 object-cover rounded"
                   />
@@ -129,12 +130,12 @@ const SingleProperty = () => {
             {/* Active Images */}
             <div className="flex flex-col lg:flex-row gap-4 w-full lg:w-auto">
               <img
-                src={property.photos[activeIndex].url}
+                src={property.photos[activeIndex]}
                 alt={`Active ${activeIndex + 1}`}
                 className="w-full md:w-[600px] lg:w-[500px] h-[300px] md:h-[450px] lg:h-[400px] object-cover rounded mx-auto"
               />
               <img
-                src={property.photos[getNextIndex(activeIndex)].url}
+                src={property.photos[getNextIndex(activeIndex)]}
                 alt={`Active ${activeIndex + 2}`}
                 className="hidden lg:block w-full lg:w-[500px] h-[300px] lg:h-[400px] object-cover rounded"
               />
@@ -203,38 +204,44 @@ const SingleProperty = () => {
             </div>
           </div>
 
-          {/* Right Column */}
-          <div className="bg-dark-90 rounded-lg p-6 h-fit">
-            <h2 className="text-xl font-semibold text-white mb-4">Contact Agent</h2>
-            <form className="space-y-4">
-              <div>
-                <input 
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full px-4 py-3 rounded-md bg-dark-100 border border-dark-80 outline-none focus:border-btn-primary text-white placeholder:text-dark-10"
-                />
+          {/* Right Column - Contact Form and Agent Info */}
+          <div className="space-y-6">
+            {/* Agent Information */}
+            <div className="bg-dark-90 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-4">Contact Agent</h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-medium text-white">{property.contactInfo?.name}</h3>
+                  <div className="flex flex-col gap-2 mt-2">
+                    <a 
+                      href={`mailto:${property.contactInfo?.email}`}
+                      className="flex items-center gap-2 text-dark-10 hover:text-white transition-colors"
+                    >
+                      <FiMail className="text-btn-primary" />
+                      {property.contactInfo?.email}
+                    </a>
+                    {property.contactInfo?.phone && (
+                      <a 
+                        href={`tel:${property.contactInfo.phone}`}
+                        className="flex items-center gap-2 text-dark-10 hover:text-white transition-colors"
+                      >
+                        <FiPhone className="text-btn-primary" />
+                        {property.contactInfo.phone}
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div>
-                <input 
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full px-4 py-3 rounded-md bg-dark-100 border border-dark-80 outline-none focus:border-btn-primary text-white placeholder:text-dark-10"
-                />
-              </div>
-              <div>
-                <textarea 
-                  rows={4}
-                  placeholder="Your Message"
-                  className="w-full px-4 py-3 rounded-md bg-dark-100 border border-dark-80 outline-none focus:border-btn-primary text-white placeholder:text-dark-10 resize-none"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-btn-primary text-white px-6 py-3 rounded-md hover:bg-btn-secondary transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-btn-primary/20 hover:-translate-y-0.5 border border-transparent hover:border-btn-accent"
-              >
-                Send Message
-              </button>
-            </form>
+            </div>
+
+            {/* Contact Form */}
+            <div className="bg-dark-90 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-4">Send Message</h2>
+              <ContactForm 
+                propertyId={property.id || ''} 
+                propertyTitle={property.title}
+              />
+            </div>
           </div>
         </div>
       </div>
