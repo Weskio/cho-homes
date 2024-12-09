@@ -1,32 +1,10 @@
-import { Property as APIProperty } from '../services/api';
 import { FirebaseProperty } from '../services/properties.firebase';
 
-export type PropertySource = 'api' | 'local';
+export type PropertySource = 'firebase';
 
-export interface PropertyPhoto {
-  url: string
-}
-
-export interface PropertyLocation {
-  name: string
-}
-
-export interface PropertyState {
-  id: string
-  title: string
-  description: string
-  price: number
-  rentFrequency?: string
-  rooms: number
-  baths: number
-  area: number
-  coverPhoto: PropertyPhoto
-  photos: PropertyPhoto[]
-  location: PropertyLocation[]
-  furnishingStatus: string | null
-  purpose: string
-  type: string
-  state: string
+export interface PropertyState extends Omit<FirebaseProperty, 'id'> {
+  id?: string;
+  source: PropertySource;
 }
 
 export function mapFirebaseToAPIProperty(p: FirebaseProperty & { id?: string }): PropertyState {
@@ -35,16 +13,17 @@ export function mapFirebaseToAPIProperty(p: FirebaseProperty & { id?: string }):
     title: p.title,
     description: p.description,
     price: p.price,
-    rentFrequency: p.purpose === 'for-rent' ? 'monthly' : undefined,
-    rooms: p.bedrooms,
-    baths: p.bathrooms,
-    area: p.area,
-    coverPhoto: { url: p.photos[0] },
-    photos: p.photos.map(url => ({ url })),
-    location: [{ name: p.location }],
-    furnishingStatus: null,
+    location: p.location,
     purpose: p.purpose,
-    type: p.propertyType,
-    state: 'active',
+    propertyType: p.propertyType,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    area: p.area,
+    photos: p.photos,
+    features: p.features,
+    contactInfo: p.contactInfo,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+    source: 'firebase',
   };
 }

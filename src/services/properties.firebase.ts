@@ -37,14 +37,19 @@ export interface FirebaseProperty {
 const PROPERTIES_COLLECTION = 'properties';
 
 // Add a new property
-export const addProperty = async (property: Omit<FirebaseProperty, 'id' | 'createdAt' | 'updatedAt'>, images: File[]) => {
+export const addProperty = async (
+  property: Omit<FirebaseProperty, 'id' | 'createdAt' | 'updatedAt'>, 
+  images: File[],
+  imageUrls: string[] = []
+) => {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
       throw new Error('User must be authenticated to add properties');
     }
 
-    const photoUrls = await Promise.all(
+    // Handle uploaded image files
+    const uploadedPhotoUrls = await Promise.all(
       images.map(async (image) => {
         const storageRef = ref(storage, `property-images/${currentUser.uid}/${Date.now()}-${image.name}`);
         const snapshot = await uploadBytes(storageRef, image);
@@ -52,11 +57,19 @@ export const addProperty = async (property: Omit<FirebaseProperty, 'id' | 'creat
       })
     );
 
+    // Combine uploaded photos with provided URLs
+    const allPhotoUrls = [...uploadedPhotoUrls, ...imageUrls];
+
     const propertyData = {
       ...property,
-      photos: photoUrls,
+      photos: allPhotoUrls,
       createdAt: new Date(),
       updatedAt: new Date(),
+      contactInfo: {
+        name: currentUser.displayName || '',
+        email: currentUser.email || '',
+        phone: '',
+      },
     };
 
     const docRef = await addDoc(collection(db, PROPERTIES_COLLECTION), propertyData);
