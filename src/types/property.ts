@@ -1,10 +1,16 @@
 import { FirebaseProperty } from '../services/properties.firebase';
+import { Property } from '../services/api';
 
-export type PropertySource = 'firebase';
+export type PropertySource = 'firebase' | 'api';
 
 export interface PropertyState extends Omit<FirebaseProperty, 'id'> {
   id?: string;
   source: PropertySource;
+  externalID?: string;
+  phoneNumber?: {
+    mobile: string;
+    phone: string;
+  };
 }
 
 export function mapFirebaseToAPIProperty(p: FirebaseProperty & { id?: string }): PropertyState {
@@ -25,5 +31,10 @@ export function mapFirebaseToAPIProperty(p: FirebaseProperty & { id?: string }):
     createdAt: p.createdAt,
     updatedAt: p.updatedAt,
     source: 'firebase',
+    externalID: p.id || '',
+    phoneNumber: {
+      mobile: p.contactInfo.phone,
+      phone: p.contactInfo.phone
+    }
   };
 }

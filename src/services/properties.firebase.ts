@@ -7,7 +7,8 @@ import {
   getDocs,
   query,
   where,
-  orderBy
+  orderBy,
+  getDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage, auth } from './firebase';
@@ -150,49 +151,47 @@ export const getProperties = async (filters?: {
   location?: string;
   propertyType?: string;
   minBedrooms?: number;
-}) => {
+}): Promise<FirebaseProperty[]> => {
   try {
-    let q = collection(db, PROPERTIES_COLLECTION);
-    const conditions = [];
+    const propertiesRef = collection(db, PROPERTIES_COLLECTION);
+    let q = propertiesRef;
 
-    // Build query based on filters
     if (filters) {
+      const conditions = [];
+
       if (filters.purpose) {
         conditions.push(where('purpose', '==', filters.purpose));
       }
-      if (filters.minPrice) {
+
+      if (filters.minPrice !== undefined) {
         conditions.push(where('price', '>=', filters.minPrice));
       }
-      if (filters.maxPrice) {
+
+      if (filters.maxPrice !== undefined) {
         conditions.push(where('price', '<=', filters.maxPrice));
       }
+
       if (filters.location) {
-        // Use case-insensitive contains for location
-        conditions.push(where('location', '>=', filters.location.toLowerCase()));
-        conditions.push(where('location', '<=', filters.location.toLowerCase() + '\uf8ff'));
+        conditions.push(where('location', '==', filters.location));
       }
+
       if (filters.propertyType) {
         conditions.push(where('propertyType', '==', filters.propertyType));
       }
-      if (filters.minBedrooms) {
+
+      if (filters.minBedrooms !== undefined) {
         conditions.push(where('bedrooms', '>=', filters.minBedrooms));
+      }
+
+      if (conditions.length > 0) {
+        q = query(propertiesRef, ...conditions, orderBy('createdAt', 'desc'));
+      } else {
+        q = query(propertiesRef, orderBy('createdAt', 'desc'));
       }
     }
 
-    // Add ordering by createdAt
-    if (conditions.length > 0) {
-      q = query(q, ...conditions, orderBy('createdAt', 'desc'));
-    } else {
-      q = query(q, orderBy('createdAt', 'desc'));
-    }
-
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate(),
-      updatedAt: doc.data().updatedAt?.toDate()
-    })) as FirebaseProperty[];
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as FirebaseProperty));
   } catch (error) {
     console.error('Error getting properties:', error);
     throw error;
@@ -200,19 +199,13 @@ export const getProperties = async (filters?: {
 };
 
 // Get a single property by ID
-export const getPropertyById = async (id: string) => {
+export const getPropertyById = async (id: string): Promise<FirebaseProperty | null> => {
   try {
     const docRef = doc(db, PROPERTIES_COLLECTION, id);
-    const docSnap = await getDocs(query(collection(db, PROPERTIES_COLLECTION), where('__name__', '==', id)));
-    
-    if (!docSnap.empty) {
-      const propertyData = docSnap.docs[0].data();
-      return {
-        id: docSnap.docs[0].id,
-        ...propertyData,
-        createdAt: propertyData.createdAt?.toDate(),
-        updatedAt: propertyData.updatedAt?.toDate()
-      } as FirebaseProperty;
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as FirebaseProperty;
     }
     return null;
   } catch (error) {

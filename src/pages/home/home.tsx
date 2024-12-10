@@ -19,7 +19,7 @@ const home = () => {
 
   return (
     <div>
-      <div className="main mb-[100vh] min-h-screen">
+      <div className="main mb-[5vh] min-h-screen">
         <div className="hero flex flex-col lg:flex-row  lg:h-[60%] relative">
           <div className="desc-text order-2 lg:order-1 mt-8 lg:mt-auto mb-auto xl:px-24 px-6 w-full lg:w-[50%]">
             <p className="text-2xl font-semibold md:text-4xl lg:text-5xl leading-[3rem] md:leading-[4rem]">Discover Your Dream Property with ChoHomes</p>
@@ -111,8 +111,8 @@ const home = () => {
         </div>
 
         {/* Properties Section */}
-        <section className="w-full py-20 bg-dark-100">
-          <div className="container mx-12 px-4">
+        <section className="w-full py-20 bg-dark-100 xl:px-24 px-6 ">
+          <div className="w-full">
             <div className="flex justify-between items-center mb-8">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -120,7 +120,7 @@ const home = () => {
                   <div className="w-2 h-2 bg-btn-primary rounded-full"></div>
                 </div>
                 <h2 className="text-4xl font-bold">Featured Properties</h2>
-                <p className="text-dark-10 mt-2 max-w-2xl">
+                <p className="text-dark-10 mt-2">
                   Explore our handpicked selection of featured properties. Each listing offers a unique mix of residential homes and investments available through Estates. Click "View Details" for more information.
                 </p>
               </div>
@@ -215,8 +215,8 @@ const home = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="w-full py-20">
-          <div className="container mx-auto px-4">
+        <section className="w-full py-20 xl:px-24 px-6 ">
+          <div className="">
             <div className="flex justify-between items-center mb-8">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -328,8 +328,8 @@ const home = () => {
         </section>
 
         {/* FAQ Section */}
-        <section className="w-full py-20 bg-dark-100">
-          <div className="container mx-auto px-4">
+        <section className="w-full xl:px-24 px-6  py-20 bg-dark-100">
+          <div className="">
             <div className="flex justify-between items-center mb-8">
               <div>
                 <div className="flex items-center gap-2 mb-2">
