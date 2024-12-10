@@ -24,9 +24,8 @@ const Properties = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
-  const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'newest'>('newest')
-  const [areaMin, setAreaMin] = useState('')
-  const [areaMax, setAreaMax] = useState('')
+  const areaMin =''
+  const areaMax = ''
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(6)
   const { getProperties: getCachedProperties, setProperties: setCachedProperties } = useDataCache()
@@ -87,17 +86,7 @@ const Properties = () => {
 
         return matchesPropertyType && matchesLocation && matchesPrice && matchesArea;
       })
-      .sort((a: PropertyState, b: PropertyState) => {
-        switch (sortBy) {
-          case 'price-asc':
-            return a.price - b.price;
-          case 'price-desc':
-            return b.price - a.price;
-          case 'newest':
-          default:
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        }
-      });
+      
   };
 
   const filteredProperties = applyFilters(properties);
@@ -111,8 +100,6 @@ const Properties = () => {
   const totalPages = Math.ceil(forRentProperties.length / itemsPerPage);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const totalSlides = Math.ceil(forSaleProperties.length / slidesPerView)
 
   return (
     <PageTransition>
@@ -221,7 +208,7 @@ const Properties = () => {
                     <Swiper
                       modules={[Navigation, Pagination]}
                       spaceBetween={24}
-                      slidesPerView={3}
+                      slidesPerView={slidesPerView}
                       navigation={{
                         prevEl: '.custom-prev',
                         nextEl: '.custom-next',

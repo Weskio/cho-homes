@@ -1,5 +1,3 @@
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
 import { getProperties } from './properties.firebase';
 import { FirebaseProperty } from './properties.firebase';
 

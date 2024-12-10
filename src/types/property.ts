@@ -1,5 +1,4 @@
 import { FirebaseProperty } from '../services/properties.firebase';
-import { Property } from '../services/api';
 
 export type PropertySource = 'firebase' | 'api';
 

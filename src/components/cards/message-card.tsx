@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message } from '../../services/messages.firebase';
-import { FiStar, FiMail, FiPhone, FiClock, FiTrash2 } from 'react-icons/fi';
+import { FiStar, FiMail, FiClock, FiTrash2 } from 'react-icons/fi';
 
 interface MessageCardProps {
   message: Message;

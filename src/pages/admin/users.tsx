@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiSearch, FiTrash2, FiMail, FiPlus } from 'react-icons/fi';
+import { FiSearch, FiMail, FiPlus } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import PageTransition from '../../components/reusables/page-transition';
 import UserForm from '../../components/forms/user-form';

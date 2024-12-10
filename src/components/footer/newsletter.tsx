@@ -1,5 +1,3 @@
-
-
 const Newsletter = () => {
   return (
     <form className="flex items-center max-w-lg mx-auto">

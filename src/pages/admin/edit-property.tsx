@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FirebaseProperty, getProperty, updateProperty } from '../../services/properties.firebase';
 import Loading from '../../components/reusables/loading';
