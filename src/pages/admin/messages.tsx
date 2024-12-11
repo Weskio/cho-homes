@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import PageTransition from '../../components/reusables/page-transition';
 import { getMessages, Message, updateMessage, deleteMessage } from '../../services/messages.firebase';
-import { motion } from 'framer-motion';
 import MessageCard from '../../components/cards/message-card';
 import { useDataCache } from '../../hooks/useDataCache';
 

@@ -8,7 +8,9 @@ import {
   query,
   where,
   orderBy,
-  getDoc
+  getDoc,
+  DocumentData,
+  Query
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage, auth } from './firebase';
@@ -27,9 +29,9 @@ export interface FirebaseProperty {
   photos: string[];
   features: string[];
   contactInfo: {
-    name: string;
-    email: string;
-    phone: string;
+    name: string | undefined | null;
+    email: string | undefined | null;
+    phone: string | undefined | null;
   };
   createdAt: Date;
   updatedAt: Date;
@@ -154,7 +156,7 @@ export const getProperties = async (filters?: {
 }): Promise<FirebaseProperty[]> => {
   try {
     const propertiesRef = collection(db, PROPERTIES_COLLECTION);
-    let q = propertiesRef;
+    let q: Query<DocumentData> = query(propertiesRef); // Initialize with default query
 
     if (filters) {
       const conditions = [];
@@ -183,15 +185,11 @@ export const getProperties = async (filters?: {
         conditions.push(where('bedrooms', '>=', filters.minBedrooms));
       }
 
-      if (conditions.length > 0) {
-        q = query(propertiesRef, ...conditions, orderBy('createdAt', 'desc'));
-      } else {
-        q = query(propertiesRef, orderBy('createdAt', 'desc'));
-      }
+      q = query(propertiesRef, ...conditions, orderBy('createdAt', 'desc'));
     }
 
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as FirebaseProperty));
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as FirebaseProperty));
   } catch (error) {
     console.error('Error getting properties:', error);
     throw error;
@@ -217,7 +215,7 @@ export const getPropertyById = async (id: string): Promise<FirebaseProperty | nu
 // Get a single property
 export const getProperty = async (id: string): Promise<FirebaseProperty | null> => {
   try {
-    const docRef = doc(db, PROPERTIES_COLLECTION, id);
+    //const docRef = doc(db, PROPERTIES_COLLECTION, id);
     const docSnap = await getDocs(query(collection(db, PROPERTIES_COLLECTION), where('id', '==', id)));
     
     if (docSnap.empty) {

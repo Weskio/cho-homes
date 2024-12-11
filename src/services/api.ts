@@ -10,20 +10,20 @@ const api = axios.create({
   }
 });
 
-interface Location {
-  id: number;
-  level: number;
-  externalID: string;
-  name: string;
-  name_l1: string;
-  name_l2: string;
-  name_l3: string;
-  slug: string;
-  slug_l1: string;
-  slug_l2: string;
-  slug_l3: string;
-  type: string;
-}
+// interface Location {
+//   id: number;
+//   level: number;
+//   externalID: string;
+//   name: string;
+//   name_l1: string;
+//   name_l2: string;
+//   name_l3: string;
+//   slug: string;
+//   slug_l1: string;
+//   slug_l2: string;
+//   slug_l3: string;
+//   type: string;
+// }
 
 export interface Property {
   id: string;
@@ -37,16 +37,16 @@ export interface Property {
   coverPhoto: {
     url: string;
   };
-  photos: {
-    url: string;
-  }[];
+  photos: string[];
   phoneNumber: {
     mobile: string;
     phone: string;
   };
-  location: Location[];
+  location: any;
   description: string;
-  contactInfo?: any
+  contactInfo?: any;
+  purpose?: any;
+  propertyType?: any
 }
 
 export interface SearchParams {

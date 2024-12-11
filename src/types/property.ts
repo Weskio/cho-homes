@@ -12,7 +12,7 @@ export interface PropertyState extends Omit<FirebaseProperty, 'id'> {
   };
 }
 
-export function mapFirebaseToAPIProperty(p: FirebaseProperty & { id?: string }): PropertyState {
+export function mapFirebaseToAPIProperty(p: FirebaseProperty & { id?: string }): any {
   return {
     id: p.id || '',
     title: p.title,

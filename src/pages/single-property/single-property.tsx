@@ -115,6 +115,7 @@ const SingleProperty = () => {
                   }`}
                   onClick={() => setActiveIndex(idx)}
                 >
+                  
                   <img
                     src={photo}
                     alt={`Thumbnail ${idx + 1}`}

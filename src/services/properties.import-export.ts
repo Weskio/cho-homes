@@ -1,3 +1,4 @@
+import { auth } from './firebase';
 import { addProperty, getProperties } from './properties.firebase';
 import * as XLSX from 'xlsx';
 
@@ -84,20 +85,37 @@ export const importProperties = async (file: File): Promise<void> => {
         bathrooms: row['Number of Bathrooms'] ? Number(row['Number of Bathrooms']) : undefined,
         area: row.Area ? Number(row.Area) : undefined,
         features: row.Features ? row.Features.split(',').map((f: string) => f.trim()) : [],
-        photos: [], // Initialize empty array for Firebase storage photos
+        photos: [], 
         source: 'firebase' as const,
       };
     });
 
     for (const property of properties) {
       const row = jsonData.find((r: any) => r.Title === property.title);
-      const imageUrls = row['Image URLs'] 
-        ? row['Image URLs'].split(',').map((url: string) => url.trim()).filter((url: string) => url)
+    
+      const imageUrls = row && typeof row === 'object' && 'Image URLs' in row && row['Image URLs'] 
+        ? (row['Image URLs'] as string).split(',').map((url: string) => url.trim()).filter((url: string) => url)
         : [];
-      
-      // Pass empty array for File uploads and image URLs separately
-      await addProperty(property, [], imageUrls);
+    
+      const validProperty = {
+        title: property.title || 'Untitled Property',
+        description: property.description || 'No description provided.',
+        price: property.price || 0,
+        location: property.location || 'Unknown',
+        purpose: property.purpose === 'for-sale' || property.purpose === 'for-rent' ? property.purpose : 'for-rent',
+        propertyType: property.propertyType || 'Unknown',
+        bedrooms: property.bedrooms || 0,
+        bathrooms: property.bathrooms || 0,
+        area: property.area || 0,
+        photos: property.photos || [],
+        features: property.features || [],
+        contactInfo: { name:auth.currentUser?.displayName, email: auth.currentUser?.displayName, phone:'' }
+      };
+    
+      await addProperty(validProperty, [], imageUrls);
     }
+    
+    
   } catch (error) {
     console.error('Error importing properties:', error);
     throw error;
