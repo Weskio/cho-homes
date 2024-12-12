@@ -18,9 +18,11 @@ import { AnimatePresence } from 'framer-motion';
 import SurprisePage from './pages/surprise/surprise';
 import { CacheProvider } from './context/CacheContext';
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
+    <>
     <Router>
       <CacheProvider>
         <AuthProvider>
@@ -85,7 +87,8 @@ function App() {
         </AuthProvider>
       </CacheProvider>
     </Router>
-    
+    <Analytics/>
+    </>
   );
 }
 
