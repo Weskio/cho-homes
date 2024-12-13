@@ -19,7 +19,7 @@ import SurprisePage from './pages/surprise/surprise';
 import { CacheProvider } from './context/CacheContext';
 import { Toaster } from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 function App() {
   return (
