@@ -67,7 +67,6 @@ const Properties = () => {
       setProperties(formattedData);
       setCachedProperties(formattedData);
     } catch (err) {
-      console.error('Error loading properties:', err);
       setError('Failed to load properties. Please try again later.');
     } finally {
       setLoading(false);

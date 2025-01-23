@@ -3,16 +3,10 @@ import { Link, FooterLinks } from "./interfaces";
 export const MENUITEMS: Link[] = [{
     name: 'Home',
     link: ''
-}, {
-    name: 'About Us',
-    link: 'about-us'
-}, {
+},  {
     name: 'Properties',
     link: 'properties'
-}, {
-    name: 'Services',
-    link: 'services'
-},
+}, 
 {
     name: 'Contact',
     link: 'contact'
@@ -31,30 +25,10 @@ export const FOOTERLINKS: FooterLinks[] = [
         ]
     },
     {
-        title: 'About Us',
-        links: [
-            { name: 'Our Story', link: '#' },
-            { name: 'Our Works', link: '#' },
-            { name: 'How it works', link: '#' },
-            { name: 'Our Team', link: '#' },
-            { name: 'Our Clients', link: '#' }
-        ]
-    },
-    {
         title: 'Properties',
         links: [
             { name: 'portfolio', link: '#' },
             { name: 'Categories', link: '#' }
-        ]
-    },
-    {
-        title: 'Services',
-        links: [
-            { name: 'Valuation Mastery', link: '#' },
-            { name: 'Strategic Marketing', link: '#' },
-            { name: 'Negotiation Wizardry', link: '#' },
-            { name: 'Closing Success', link: '#' },
-            { name: 'Property Management', link: '#' }
         ]
     },
     {
