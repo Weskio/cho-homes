@@ -142,8 +142,8 @@ const home = () => {
         {/* Properties Section */}
         <section className="w-full py-20 bg-dark-100 xl:px-24 px-6 ">
           <div className="w-full">
-            <div className="flex justify-between items-center mb-8">
-              <div>
+            <div className="md:flex justify-between items-center mb-8">
+              <div className="mb-4 md:mb-0">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1 h-1 bg-btn-primary rounded-full"></div>
                   <div className="w-2 h-2 bg-btn-primary rounded-full"></div>
@@ -164,7 +164,6 @@ const home = () => {
               <Swiper
                 modules={[Navigation, Pagination]}
                 spaceBetween={24}
-                slidesPerView={3}
                 navigation={{
                   prevEl: propertyPrevRef.current,
                   nextEl: propertyNextRef.current,
@@ -285,8 +284,8 @@ const home = () => {
         {/* Testimonials Section */}
         <section className="w-full py-20 xl:px-24 px-6 ">
           <div className="">
-            <div className="flex justify-between items-center mb-8">
-              <div>
+            <div className="md:flex justify-between items-center mb-8">
+              <div className="mb-4 md:mb-0">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1 h-1 bg-btn-primary rounded-full"></div>
                   <div className="w-2 h-2 bg-btn-primary rounded-full"></div>
@@ -304,7 +303,6 @@ const home = () => {
               <Swiper
                 modules={[Navigation, Pagination]}
                 spaceBetween={24}
-                slidesPerView={3}
                 navigation={{
                   prevEl: testimonialPrevRef.current,
                   nextEl: testimonialNextRef.current,
